@@ -1,0 +1,42 @@
+/**
+ * @param {number[]} jobs
+ * @param {number} k
+ * @return {number}
+ */
+var minimumTimeRequired = function(jobs, k) {
+    
+//sort jobs decreasingly
+    jobs.sort((a,b)=>a+b);
+    
+    
+//distribute (sinusoide)
+    const workers = [];
+    const counter = k;
+    
+    function inc(){
+        for (i=0; i<k; i++){
+        workers[i].push(jobs[i]);
+        counter--;
+        }
+    }
+    
+    function dec(){
+        for (i=0; i<k; i++){
+        workers[i].push(jobs[-i]);
+        counter--;
+        }  
+    }
+
+    while (counter){
+        inc();
+        dec();
+    }
+    
+//find & return the biggest
+    var totals = [];
+    for(i=0; i<k; i++){
+        totals[i] = workers[i].reduce(function(a,b){return a+b;}, 0)
+    }
+    
+    return Math.max(...totals);    
+}
