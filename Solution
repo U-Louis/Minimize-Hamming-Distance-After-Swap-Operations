@@ -6,34 +6,31 @@
 var minimumTimeRequired = function(jobs, k) {
     
 //sort jobs decreasingly
-    jobs.sort((a,b)=>a+b);
-    
-    
-//distribute (sinusoide)
-    const workers = [];
-    const counter = k;
-    
-    function inc(){
-        for (i=0; i<k; i++){
-        workers[i].push(jobs[i]);
-        counter--;
-        }
-    }
-    
-    function dec(){
-        for (i=0; i<k; i++){
-        workers[i].push(jobs[-i]);
-        counter--;
-        }  
-    }
-
-    while (counter){
-        inc();
-        dec();
-    }
+    jobs = jobs.sort((a,b)=>a+b);
+        
+/**distribute function (sinusoide)
+* The idea is to distribute the k biggest jobs to each worker, then the k smallest jobs.
+* And repeat untill we run out of jobs.
+* range is the total number of jobs
+* subRange is the number of workers
+*/
+    function distribute(range, subRange, arrPushing){
+        const arrToFill = [];        
+        while(range){
+            for (i=0; i<subRange; i++){
+            arrToFill[i].push(arrPushing[i]);
+            range--;        
+            }
+            for (i=0; i<subRange; i++){
+            arrToFill[i].push(arrPushing[-i]);
+            range--;        
+            }         
+        }        
+        return arrToFill;
+    }    
     
 //find & return the biggest
-    var totals = [];
+    var totals = distribute(jobs.length, k, jobs);
     for(i=0; i<k; i++){
         totals[i] = workers[i].reduce(function(a,b){return a+b;}, 0)
     }
