@@ -54,6 +54,8 @@ var kLeft = k;
     
     
 //find & return the biggest job
+                        console.log(distribution);
+
     return Math.max(...distribution);
 
 }
