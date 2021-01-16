@@ -1,0 +1,59 @@
+/**
+ * @param {number[]} jobs
+ * @param {number} k
+ * @return {number}
+ */
+var minimumTimeRequired = function(jobs, k) {
+    
+ /*The idea is to use a greedy distribution.
+ * give the biggest to each k, the complete it with the smallest ks
+ * the range of completition is given by the average total jobs a k should have
+ * And since we use a range, let's use it to remove every simple combination of
+ * 2 jobs that fit it. 
+ */
+    
+//sort jobs increasingly
+   const jobsSorted = jobs.sort((a,b)=>a-b);
+        
+//distribute function
+    //determine the average rounded amount of hours for each worker : m
+var m =   Math.round(jobs.reduce(function(a,b){return a+b},0)/k);
+console.log("m = "+ m);
+var kLeft = k;
+
+    //(accelerator) remove the perfect formations and exclude the k that are filled
+    for (i=0; i<jobsSorted.length; i++){
+        for(j=1; j<jobsSorted.length;j++){
+                if(jobsSorted[i]+jobsSorted[j] == m){
+                    console.log("removing : "+ jobsSorted[i] +", "+ jobsSorted[j])                    
+                    jobsSorted.splice(i, 1);
+                    jobsSorted.splice(j, 1);
+                    kLeft--;
+                    console.log("Reste : "+ jobsSorted)
+                }
+        }
+    }
+    
+    //distribute jobs left to kLeft in the distribution
+    var distribution =[];
+    for(i=0; i<kLeft;i++){
+        distribution[i] += jobsSorted[-i];
+        jobsSorted.splice(-i,1);
+        for (j=0; j<jobsSorted.length; j++){
+            while(distribution[i]<m){
+                distribution[i] += jobsSorted[j];
+                jobsSorted.splice(j,1);
+            }
+        }
+    }
+        
+    //Remove the possible last job
+    if (jobsSorted.length > 0){
+        distribution[Math.min(distribution)] += jobsSorted[0];
+    };
+    
+    
+//find & return the biggest job
+    return Math.max(...distribution);
+
+}
