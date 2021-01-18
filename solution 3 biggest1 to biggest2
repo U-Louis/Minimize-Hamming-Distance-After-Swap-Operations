@@ -1,0 +1,50 @@
+/**
+ * @param {number[]} jobs
+ * @param {number} k
+ * @return {number}
+ */
+var minimumTimeRequired = function(jobs, k) {
+    
+//sort jobs decreasingly
+    const jobsSorted = jobs.sort((a,b)=>a-b).reverse();
+    console.log("sorted jobs : "+jobsSorted);
+        
+/**distribute function
+* The idea is to distribute for each k the biggest job, then add the 2nd biggest
+* and so on until it reaches the range, which is the average jobs per k
+*/
+    let pool = jobsSorted;
+    const range = Math.round(jobs.reduce(function(a,b){return a+b},0)/k);
+    let solution = new Array(k);
+    console.log("range is : "+range);
+    
+    for (i=0;i<k;i++){
+            for (j=i+1;j<pool.length;j++){
+                if(Number.isInteger(pool[j]) == true && pool[i]+pool[j] <= range){
+                    console.log("added : " + pool[i] + ", "+ pool[j])
+                    console.log(i + " "+ j);
+                pool[i] = pool[i] + pool[j];
+                pool.splice(j,1);
+                    console.log("pool : "+pool);
+                j--;
+            }
+        }
+    }
+    
+//distribute rest
+    if(pool.length > k){
+            
+    var min = Math.min(...pool);
+    for (let i = 0; i < pool.length; i++) { 
+        if ( pool[i] == min ) { 
+            pool.splice(i, 1); 
+    }
+}
+    var max = Math.min(...pool);
+    pool.push(min+max);
+    }
+
+    
+//find & return the biggest
+    return Math.max(...pool);
+}
