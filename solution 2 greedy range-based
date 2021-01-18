@@ -5,7 +5,7 @@
  */
 var minimumTimeRequired = function(jobs, k) {
     
- /*The idea is to use a greedy distribution.
+ /*The idea is to use a greedy distribution. (Work in progress)
  * give the biggest to each k, the complete it with the smallest ks
  * the range of completition is given by the average total jobs a k should have
  * And since we use a range, let's use it to remove every simple combination of
