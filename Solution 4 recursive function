@@ -1,0 +1,31 @@
+// Wenyu Zhang (zachzwy) 's solution
+
+/**
+ * @param {number[]} jobs
+ * @param {number} k
+ * @return {number}
+ */
+
+var minimumTimeRequired = function(jobs, k) {
+ 
+  const N = jobs.length;
+  let res = Infinity;
+  const worker = Array(k).fill(0);
+
+  const dfs = (idx = 0) => {
+    if (idx === N) {
+      res = Math.min(res, Math.max(...worker));
+      return;
+    }
+
+    for (let i = 0; i < k; i++) {
+      if (worker[i] + jobs[idx] > res) continue;
+      worker[i] += jobs[idx];
+      dfs(idx + 1);
+      worker[i] -= jobs[idx];
+      if (!worker[i]) break;
+    }
+  };
+  dfs();
+  return res;
+};
